@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>股票交易策略分析工具</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --primary-color: #3498db;
@@ -142,16 +143,7 @@
             background: #27ae60;
         }
         
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .button-group .btn {
-            margin-top: 0;
-            flex: 1;
-        }
+
         
         table {
             width: 100%;
@@ -219,38 +211,57 @@
         
         .charts-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin: 30px 0;
+            flex-direction: column;
+            gap: 40px;
+            margin: 40px 0;
         }
         
         .chart-wrapper {
-            flex: 1;
-            min-width: 400px;
-            height: 500px;
+            width: 100%;
+            height: 700px;
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: var(--border-radius);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            border: 1px solid rgba(52, 152, 219, 0.1);
-            transition: all 0.3s ease;
+            padding: 40px;
+            border: 2px solid rgba(52, 152, 219, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
         
         .chart-wrapper:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(52, 152, 219, 0.25);
+            border-color: rgba(52, 152, 219, 0.3);
         }
         
         .chart-wrapper canvas {
-            max-height: 450px !important;
+            max-height: 550px !important;
         }
         
         .chart-header {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             color: var(--dark-color);
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.3rem;
+            padding: 18px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: var(--border-radius);
+            border-bottom: 3px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .chart-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
         }
         
         .tabs {
@@ -394,10 +405,7 @@
                 margin-top: 15px;
             }
             
-            .button-group {
-                flex-direction: column;
-                gap: 10px;
-            }
+
             
             .summary-box {
                 flex-direction: column;
@@ -425,12 +433,12 @@
             
             .chart-wrapper {
                 min-width: 100%;
-                height: 350px;
-                padding: 20px 15px;
+                height: 450px;
+                padding: 25px 20px;
             }
             
             .chart-wrapper canvas {
-                max-height: 300px !important;
+                max-height: 380px !important;
             }
             
             .tabs {
@@ -491,11 +499,19 @@
                 padding: 15px 0;
             }
             
-            /* 移动端图表标题 */
-            .chart-header {
-                font-size: 1rem;
-                margin-bottom: 12px;
-            }
+                    /* 移动端图表标题 */
+        .chart-header {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+        
+        .chart-header::before {
+            width: 50px;
+            height: 2px;
+        }
+        
+
             
             /* 移动端页脚 */
             footer {
@@ -540,17 +556,15 @@
                 font-size: 1rem;
             }
             
-            .button-group {
-                gap: 8px;
-            }
+
             
             .chart-wrapper {
-                height: 300px;
-                padding: 15px 10px;
+                height: 380px;
+                padding: 20px 15px;
             }
             
             .chart-wrapper canvas {
-                max-height: 250px !important;
+                max-height: 320px !important;
             }
             
             .tab {
@@ -581,11 +595,11 @@
         /* 横屏模式优化 */
         @media (max-width: 768px) and (orientation: landscape) {
             .chart-wrapper {
-                height: 250px;
+                height: 320px;
             }
             
             .chart-wrapper canvas {
-                max-height: 200px !important;
+                max-height: 260px !important;
             }
             
             .container {
@@ -793,10 +807,7 @@
                     </div>
                 </div>
                 
-                <div class="button-group">
-                    <button class="btn" id="generateStrategyBtn" onclick="confirmGenerateStrategy()" disabled>生成交易策略</button>
-                    <button class="btn btn-secondary" id="resetBtn" onclick="confirmReset()">一键重置</button>
-                </div>
+                <button class="btn" id="generateStrategyBtn" onclick="calculateStrategies()" disabled>生成交易策略</button>
             </div>
         </div>
         
@@ -870,11 +881,11 @@
                         
                         <div class="charts-container">
                             <div class="chart-wrapper">
-                                <div class="chart-header">收益与收益率变化</div>
+                                <div class="chart-header">📈 收益与收益率变化趋势</div>
                                 <canvas id="strategyA-profitChart"></canvas>
                             </div>
                             <div class="chart-wrapper">
-                                <div class="chart-header">买入计划分布</div>
+                                <div class="chart-header">💰 买入计划分布与成本分析</div>
                                 <canvas id="strategyA-buyPlanChart"></canvas>
                             </div>
                         </div>
@@ -945,11 +956,11 @@
                         
                         <div class="charts-container">
                             <div class="chart-wrapper">
-                                <div class="chart-header">收益与收益率变化</div>
+                                <div class="chart-header">📈 收益与收益率变化趋势</div>
                                 <canvas id="strategyB-profitChart"></canvas>
                             </div>
                             <div class="chart-wrapper">
-                                <div class="chart-header">买入计划分布</div>
+                                <div class="chart-header">💰 买入计划分布与成本分析</div>
                                 <canvas id="strategyB-buyPlanChart"></canvas>
                             </div>
                         </div>
@@ -963,11 +974,11 @@
                     <div class="card-body">
                         <div class="charts-container">
                             <div class="chart-wrapper">
-                                <div class="chart-header">策略收益对比</div>
+                                <div class="chart-header">📊 策略收益对比分析</div>
                                 <canvas id="comparison-profitChart"></canvas>
                             </div>
                             <div class="chart-wrapper">
-                                <div class="chart-header">策略收益率对比</div>
+                                <div class="chart-header">📈 策略收益率对比趋势</div>
                                 <canvas id="comparison-rateChart"></canvas>
                             </div>
                         </div>
@@ -1018,6 +1029,8 @@
                                 <p id="strategy-suggestion">请先生成策略分析以获取建议。</p>
                             </div>
                         </div>
+                        
+
                     </div>
                 </div>
             </div>
@@ -1166,96 +1179,7 @@
             }
         }
         
-        // 确认生成交易策略
-        function confirmGenerateStrategy() {
-            if (confirm('确定要生成交易策略吗？这将基于当前设置计算详细的投资计划。')) {
-                calculateStrategies();
-            }
-        }
-        
-        // 确认重置
-        function confirmReset() {
-            if (confirm('确定要重置所有设置吗？这将清空所有输入数据和计算结果。')) {
-                resetAllData();
-            }
-        }
-        
-        // 重置所有数据
-        function resetAllData() {
-            // 重置股票基本信息
-            document.getElementById('marketType').value = 'HK';
-            document.getElementById('companyName').value = '美图';
-            document.getElementById('stockCode').value = '01357';
-            document.getElementById('currentPrice').value = '';
-            document.getElementById('totalBudget').value = '';
-            document.getElementById('sharesPerHand').value = '100';
-            document.getElementById('maxBuys').value = '10';
-            document.getElementById('historicalHigh').value = '';
-            document.getElementById('historicalLow').value = '';
-            document.getElementById('week52High').value = '';
-            document.getElementById('week52Low').value = '';
-            document.getElementById('marketCap').value = '';
-            document.getElementById('totalShares').value = '';
-            
-            // 重置交易策略设置
-            document.getElementById('strategyACondition').value = 'down';
-            document.getElementById('strategyAPercentage').value = '10';
-            document.getElementById('strategyAHands').value = '4';
-            document.getElementById('strategyBCondition').value = 'up';
-            document.getElementById('strategyBPercentage').value = '10';
-            document.getElementById('strategyBHands').value = '3';
-            
-            // 隐藏结果区域
-            document.getElementById('results').style.display = 'none';
-            
-            // 重置表单验证状态
-            document.getElementById('generateStrategyBtn').disabled = true;
-            
-            // 重置表单边框颜色
-            const requiredFields = [
-                'companyName', 'stockCode', 'currentPrice', 'historicalHigh', 'historicalLow',
-                'week52High', 'week52Low', 'marketCap', 'totalShares', 'sharesPerHand',
-                'strategyACondition', 'strategyAPercentage', 'strategyAHands',
-                'strategyBCondition', 'strategyBPercentage', 'strategyBHands',
-                'totalBudget', 'maxBuys'
-            ];
-            
-            requiredFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    field.style.borderColor = '#ddd';
-                }
-            });
-            
-            // 清空所有图表
-            if (window.strategyAProfitChart) {
-                window.strategyAProfitChart.destroy();
-                window.strategyAProfitChart = null;
-            }
-            if (window.strategyABuyPlanChart) {
-                window.strategyABuyPlanChart.destroy();
-                window.strategyABuyPlanChart = null;
-            }
-            if (window.strategyBProfitChart) {
-                window.strategyBProfitChart.destroy();
-                window.strategyBProfitChart = null;
-            }
-            if (window.strategyBBuyPlanChart) {
-                window.strategyBBuyPlanChart.destroy();
-                window.strategyBBuyPlanChart = null;
-            }
-            if (window.comparisonChart) {
-                window.comparisonChart.destroy();
-                window.comparisonChart = null;
-            }
-            
-            // 重置数据变量
-            strategyAData = null;
-            strategyBData = null;
-            
-            // 显示成功消息
-            alert('所有数据已重置！');
-        }
+
         
         // 计算策略
         function calculateStrategies() {
@@ -1703,7 +1627,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
                         intersect: false
@@ -1853,7 +1777,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuart'
@@ -1985,7 +1909,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     interaction: {
                         mode: 'index',
                         intersect: false
@@ -2135,7 +2059,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuart'
@@ -2282,7 +2206,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuart'
@@ -2382,7 +2306,11 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     animation: {
                         duration: 2000,
                         easing: 'easeInOutQuart'
