@@ -1556,7 +1556,7 @@
             const profitCtx = document.getElementById('strategyA-profitChart').getContext('2d');
             const filteredAnalysis = strategyAData.profitAnalysis.filter(item => 
                 item.targetPrice >= (strategyAData.buyPlan[0]?.price || 0) * 0.8
-            ).slice(0, 20);
+            );
             
             if (filteredAnalysis.length === 0) {
                 console.error('策略A过滤后的数据为空');
@@ -1725,7 +1725,7 @@
             
             const buyPlanLabels = strategyAData.buyPlan.map(item => `第${item.sequence}次`);
             const buyPrices = strategyAData.buyPlan.map(item => item.price);
-            const buyCosts = strategyAData.buyPlan.map(item => item.cost / 1000);
+            const buyCosts = strategyAData.buyPlan.map(item => item.cost);
             
             if (window.strategyABuyPlanChart) {
                 window.strategyABuyPlanChart.destroy();
@@ -1733,7 +1733,7 @@
             
             const marketTypeA = document.getElementById('marketType').value;
             const currencySymbolA = marketTypeA === 'US' ? '$' : 'HK$';
-            const currencyUnitA = marketTypeA === 'US' ? '千美元' : '千港元';
+            const currencyUnitA = marketTypeA === 'US' ? '美元' : '港元';
             
             window.strategyABuyPlanChart = new Chart(buyPlanCtx, {
                 type: 'bar',
@@ -1838,7 +1838,7 @@
             const profitCtx = document.getElementById('strategyB-profitChart').getContext('2d');
             const filteredAnalysis = strategyBData.profitAnalysis.filter(item => 
                 item.targetPrice >= (strategyBData.buyPlan[0]?.price || 0) * 0.8
-            ).slice(0, 20);
+            );
             
             if (filteredAnalysis.length === 0) {
                 console.error('策略B过滤后的数据为空');
@@ -2007,7 +2007,7 @@
             
             const buyPlanLabels = strategyBData.buyPlan.map(item => `第${item.sequence}次`);
             const buyPrices = strategyBData.buyPlan.map(item => item.price);
-            const buyCosts = strategyBData.buyPlan.map(item => item.cost / 1000);
+            const buyCosts = strategyBData.buyPlan.map(item => item.cost);
             
             if (window.strategyBBuyPlanChart) {
                 window.strategyBBuyPlanChart.destroy();
@@ -2015,7 +2015,7 @@
             
             const marketTypeB = document.getElementById('marketType').value;
             const currencySymbolB = marketTypeB === 'US' ? '$' : 'HK$';
-            const currencyUnitB = marketTypeB === 'US' ? '千美元' : '千港元';
+            const currencyUnitB = marketTypeB === 'US' ? '美元' : '港元';
             
             window.strategyBBuyPlanChart = new Chart(buyPlanCtx, {
                 type: 'bar',
@@ -2127,8 +2127,8 @@
                 strategyBData.buyPlan[0]?.price || 0
             ) * 0.8;
             
-            const commonAnalysisA = strategyAData.profitAnalysis.filter(item => item.targetPrice >= minPrice).slice(0, 15);
-            const commonAnalysisB = strategyBData.profitAnalysis.filter(item => item.targetPrice >= minPrice).slice(0, 15);
+            const commonAnalysisA = strategyAData.profitAnalysis.filter(item => item.targetPrice >= minPrice);
+            const commonAnalysisB = strategyBData.profitAnalysis.filter(item => item.targetPrice >= minPrice);
             
             // 检查过滤后的数据
             if (commonAnalysisA.length === 0 || commonAnalysisB.length === 0) {
@@ -2378,33 +2378,35 @@
             }
             
             const currentPrice = parseFloat(document.getElementById('currentPrice').value);
+            const marketType = document.getElementById('marketType').value;
+            const currencyUnit = marketType === 'US' ? '美元' : '港元';
             
             // 简单的策略建议逻辑
             if (strategyAData.averageCost < currentPrice && strategyBData.averageCost > currentPrice) {
                 suggestionElement.innerHTML = `
                     <p><strong>策略建议：</strong></p>
-                    <p>当前股价为 ${currentPrice.toFixed(2)} 港元，高于策略A的平均成本(${strategyAData.averageCost.toFixed(2)} 港元)，但低于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} 港元)。</p>
+                    <p>当前股价为 ${currentPrice.toFixed(2)} ${currencyUnit}，高于策略A的平均成本(${strategyAData.averageCost.toFixed(2)} ${currencyUnit})，但低于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} ${currencyUnit})。</p>
                     <p><strong>推荐策略A</strong>，因为该策略在股价下跌时逐步买入，成本较低，当前已处于盈利状态。这种策略适合震荡市或预期股价可能继续下跌的市场环境。</p>
                     <p>策略B需要股价进一步上涨才能回本，风险相对较高。</p>
                 `;
             } else if (strategyAData.averageCost > currentPrice && strategyBData.averageCost < currentPrice) {
                 suggestionElement.innerHTML = `
                     <p><strong>策略建议：</strong></p>
-                    <p>当前股价为 ${currentPrice.toFixed(2)} 港元，低于策略A的平均成本(${strategyAData.averageCost.toFixed(2)} 港元)，但高于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} 港元)。</p>
+                    <p>当前股价为 ${currentPrice.toFixed(2)} ${currencyUnit}，低于策略A的平均成本(${strategyAData.averageCost.toFixed(2)} ${currencyUnit})，但高于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} ${currencyUnit})。</p>
                     <p><strong>推荐策略B</strong>，因为该策略在股价上涨时买入，表明市场趋势向好，当前已处于盈利状态。这种策略适合牛市或预期股价将继续上涨的市场环境。</p>
                     <p>策略A目前处于亏损状态，需要股价反弹才能回本。</p>
                 `;
             } else if (strategyAData.averageCost < strategyBData.averageCost) {
                 suggestionElement.innerHTML = `
                     <p><strong>策略建议：</strong></p>
-                    <p>策略A的平均成本(${strategyAData.averageCost.toFixed(2)} 港元)低于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} 港元)。</p>
+                    <p>策略A的平均成本(${strategyAData.averageCost.toFixed(2)} ${currencyUnit})低于策略B的平均成本(${strategyBData.averageCost.toFixed(2)} ${currencyUnit})。</p>
                     <p>如果预期市场将震荡或下行，<strong>推荐策略A</strong>，因为它通过在股价下跌时买入，有效降低了持仓成本，风险相对较小。</p>
                     <p>如果预期市场将强劲上涨，可以考虑策略B，但需要承担更高的成本风险。</p>
                 `;
             } else {
                 suggestionElement.innerHTML = `
                     <p><strong>策略建议：</strong></p>
-                    <p>两种策略的平均成本相近，策略A为 ${strategyAData.averageCost.toFixed(2)} 港元，策略B为 ${strategyBData.averageCost.toFixed(2)} 港元。</p>
+                    <p>两种策略的平均成本相近，策略A为 ${strategyAData.averageCost.toFixed(2)} ${currencyUnit}，策略B为 ${strategyBData.averageCost.toFixed(2)} ${currencyUnit}。</p>
                     <p>如果市场趋势不确定，<strong>推荐策略A</strong>，因为它在股价下跌时买入，可以更好地控制风险，适合长期投资。</p>
                     <p>如果对市场上涨有较强信心，可以选择策略B，但需要注意控制风险。</p>
                 `;
