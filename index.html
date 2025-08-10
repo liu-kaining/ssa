@@ -696,7 +696,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="currentPrice">当前股价</label>
-                            <input type="number" id="currentPrice" value="4.37" step="0.01" required>
+                            <input type="number" id="currentPrice" value="11.19" step="0.01" required>
                         </div>
                     </div>
                 </div>
@@ -705,25 +705,25 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="historicalHigh">历史最高价</label>
-                            <input type="number" id="historicalHigh" value="22.04" step="0.01" required>
+                            <input type="number" id="historicalHigh" value="22.83" step="0.01" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="historicalLow">历史最低价</label>
-                            <input type="number" id="historicalLow" value="0.62" step="0.01" required>
+                            <input type="number" id="historicalLow" value="0.43" step="0.01" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="week52High">52周最高价</label>
-                            <input type="number" id="week52High" value="6.75" step="0.01" required>
+                            <input type="number" id="week52High" value="12.56" step="0.01" required>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="week52Low">52周最低价</label>
-                            <input type="number" id="week52Low" value="1.96" step="0.01" required>
+                            <input type="number" id="week52Low" value="1.90" step="0.01" required>
                         </div>
                     </div>
                 </div>
@@ -731,8 +731,8 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label for="marketCap">当前市值</label>
-                            <input type="number" id="marketCap" value="199.29" step="0.01" required>
+                            <label for="marketCap">当前市值 <span id="marketCapUnit">亿港元</span></label>
+                            <input type="number" id="marketCap" value="510.96" step="0.01" required>
                         </div>
                     </div>
                     <div class="col">
@@ -1074,32 +1074,34 @@
             
             if (marketType === 'US') {
                 // 美股设置
-                document.getElementById('currentPrice').value = '150.00';
-                document.getElementById('historicalHigh').value = '200.00';
-                document.getElementById('historicalLow').value = '50.00';
-                document.getElementById('week52High').value = '180.00';
-                document.getElementById('week52Low').value = '80.00';
-                document.getElementById('marketCap').value = '2500.00';
-                document.getElementById('totalShares').value = '16.5';
-                document.getElementById('sharesPerHand').value = '100';
+                document.getElementById('currentPrice').value = '329';
+                document.getElementById('historicalHigh').value = '488.54';
+                document.getElementById('historicalLow').value = '0.999';
+                document.getElementById('week52High').value = '488.54';
+                document.getElementById('week52Low').value = '193.67';
+                document.getElementById('marketCap').value = '10600';
+                document.getElementById('totalShares').value = '32.25';
+                document.getElementById('sharesPerHand').value = '1';
                 document.getElementById('totalBudget').value = '50000';
-                document.getElementById('companyName').value = 'Apple Inc.';
-                document.getElementById('stockCode').value = 'AAPL';
+                document.getElementById('companyName').value = '特斯拉';
+                document.getElementById('stockCode').value = 'TSLA';
                 document.getElementById('budgetUnit').textContent = '美元';
+                document.getElementById('marketCapUnit').textContent = '亿美元';
             } else {
                 // 港股设置
-                document.getElementById('currentPrice').value = '4.37';
-                document.getElementById('historicalHigh').value = '22.04';
-                document.getElementById('historicalLow').value = '0.62';
-                document.getElementById('week52High').value = '6.75';
-                document.getElementById('week52Low').value = '1.96';
-                document.getElementById('marketCap').value = '199.29';
+                document.getElementById('currentPrice').value = '11.19';
+                document.getElementById('historicalHigh').value = '22.83';
+                document.getElementById('historicalLow').value = '0.43';
+                document.getElementById('week52High').value = '12.56';
+                document.getElementById('week52Low').value = '1.90';
+                document.getElementById('marketCap').value = '510.96';
                 document.getElementById('totalShares').value = '45.6';
                 document.getElementById('sharesPerHand').value = '500';
                 document.getElementById('totalBudget').value = '32000';
                 document.getElementById('companyName').value = '美图';
                 document.getElementById('stockCode').value = '01357';
                 document.getElementById('budgetUnit').textContent = '港元';
+                document.getElementById('marketCapUnit').textContent = '亿港元';
             }
             validateForm(); // 更新市场设置后验证表单
         }
