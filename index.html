@@ -142,6 +142,17 @@
             background: #27ae60;
         }
         
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .button-group .btn {
+            margin-top: 0;
+            flex: 1;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -383,6 +394,11 @@
                 margin-top: 15px;
             }
             
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
             .summary-box {
                 flex-direction: column;
                 padding: 12px;
@@ -522,6 +538,10 @@
             .btn {
                 padding: 12px;
                 font-size: 1rem;
+            }
+            
+            .button-group {
+                gap: 8px;
             }
             
             .chart-wrapper {
@@ -773,7 +793,10 @@
                     </div>
                 </div>
                 
-                <button class="btn" id="generateStrategyBtn" onclick="calculateStrategies()" disabled>生成交易策略</button>
+                <div class="button-group">
+                    <button class="btn" id="generateStrategyBtn" onclick="confirmGenerateStrategy()" disabled>生成交易策略</button>
+                    <button class="btn btn-secondary" id="resetBtn" onclick="confirmReset()">一键重置</button>
+                </div>
             </div>
         </div>
         
@@ -1141,6 +1164,97 @@
             if (strategyBHeader) {
                 strategyBHeader.textContent = `策略B：${conditionTextB}${strategyBPercentage}%时买入${strategyBHands}手`;
             }
+        }
+        
+        // 确认生成交易策略
+        function confirmGenerateStrategy() {
+            if (confirm('确定要生成交易策略吗？这将基于当前设置计算详细的投资计划。')) {
+                calculateStrategies();
+            }
+        }
+        
+        // 确认重置
+        function confirmReset() {
+            if (confirm('确定要重置所有设置吗？这将清空所有输入数据和计算结果。')) {
+                resetAllData();
+            }
+        }
+        
+        // 重置所有数据
+        function resetAllData() {
+            // 重置股票基本信息
+            document.getElementById('marketType').value = 'HK';
+            document.getElementById('companyName').value = '美图';
+            document.getElementById('stockCode').value = '01357';
+            document.getElementById('currentPrice').value = '';
+            document.getElementById('totalBudget').value = '';
+            document.getElementById('sharesPerHand').value = '100';
+            document.getElementById('maxBuys').value = '10';
+            document.getElementById('historicalHigh').value = '';
+            document.getElementById('historicalLow').value = '';
+            document.getElementById('week52High').value = '';
+            document.getElementById('week52Low').value = '';
+            document.getElementById('marketCap').value = '';
+            document.getElementById('totalShares').value = '';
+            
+            // 重置交易策略设置
+            document.getElementById('strategyACondition').value = 'down';
+            document.getElementById('strategyAPercentage').value = '10';
+            document.getElementById('strategyAHands').value = '4';
+            document.getElementById('strategyBCondition').value = 'up';
+            document.getElementById('strategyBPercentage').value = '10';
+            document.getElementById('strategyBHands').value = '3';
+            
+            // 隐藏结果区域
+            document.getElementById('results').style.display = 'none';
+            
+            // 重置表单验证状态
+            document.getElementById('generateStrategyBtn').disabled = true;
+            
+            // 重置表单边框颜色
+            const requiredFields = [
+                'companyName', 'stockCode', 'currentPrice', 'historicalHigh', 'historicalLow',
+                'week52High', 'week52Low', 'marketCap', 'totalShares', 'sharesPerHand',
+                'strategyACondition', 'strategyAPercentage', 'strategyAHands',
+                'strategyBCondition', 'strategyBPercentage', 'strategyBHands',
+                'totalBudget', 'maxBuys'
+            ];
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+            
+            // 清空所有图表
+            if (window.strategyAProfitChart) {
+                window.strategyAProfitChart.destroy();
+                window.strategyAProfitChart = null;
+            }
+            if (window.strategyABuyPlanChart) {
+                window.strategyABuyPlanChart.destroy();
+                window.strategyABuyPlanChart = null;
+            }
+            if (window.strategyBProfitChart) {
+                window.strategyBProfitChart.destroy();
+                window.strategyBProfitChart = null;
+            }
+            if (window.strategyBBuyPlanChart) {
+                window.strategyBBuyPlanChart.destroy();
+                window.strategyBBuyPlanChart = null;
+            }
+            if (window.comparisonChart) {
+                window.comparisonChart.destroy();
+                window.comparisonChart = null;
+            }
+            
+            // 重置数据变量
+            strategyAData = null;
+            strategyBData = null;
+            
+            // 显示成功消息
+            alert('所有数据已重置！');
         }
         
         // 计算策略
