@@ -1753,7 +1753,8 @@
                             pointBackgroundColor: '#9b59b6',
                             pointBorderColor: '#ffffff',
                             pointBorderWidth: 3,
-                            tension: 0.4
+                            tension: 0.4,
+                            yAxisID: 'y1'
                         },
                         {
                             label: `支出 (${currencyUnitA})`,
@@ -1773,13 +1774,18 @@
                             borderColor: 'rgba(52, 152, 219, 1)',
                             borderWidth: 2,
                             borderRadius: 8,
-                            order: 0
+                            order: 0,
+                            yAxisID: 'y'
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuart'
@@ -1809,8 +1815,43 @@
                             }
                         },
                         y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: `支出 (${currencyUnitA})`,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
                             beginAtZero: true,
                             grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: `买入价格 (${currencySymbolA})`,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
                                 color: 'rgba(0, 0, 0, 0.1)',
                                 lineWidth: 1
                             },
@@ -2035,7 +2076,8 @@
                             pointBackgroundColor: '#9b59b6',
                             pointBorderColor: '#ffffff',
                             pointBorderWidth: 3,
-                            tension: 0.4
+                            tension: 0.4,
+                            yAxisID: 'y1'
                         },
                         {
                             label: `支出 (${currencyUnitB})`,
@@ -2055,13 +2097,18 @@
                             borderColor: 'rgba(52, 152, 219, 1)',
                             borderWidth: 2,
                             borderRadius: 8,
-                            order: 0
+                            order: 0,
+                            yAxisID: 'y'
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuart'
@@ -2091,8 +2138,43 @@
                             }
                         },
                         y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: `支出 (${currencyUnitB})`,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
                             beginAtZero: true,
                             grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: `买入价格 (${currencySymbolB})`,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
                                 color: 'rgba(0, 0, 0, 0.1)',
                                 lineWidth: 1
                             },
